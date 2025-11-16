@@ -8,17 +8,35 @@
     <link rel="stylesheet" href="Home2.css">
 </head>
 
+<script>
+    const moreBtn = document.querySelector(".more-btn");
+    const menu = document.querySelector(".mobile-menu");
+
+    moreBtn.addEventListener("click", () => {
+        menu.classList.toggle("show-menu");
+    });
+</script>
+
+
 <body>
     <header>
         <a href="" id="ed"><img src="/ezgif.com-animated-gif-maker (3).gif" alt="edu saga" width="140px"
                 height="110px"></a>
-        <nav>
-            <a href="#ABOUT" class="link1 link">ABOUT </a>
-            <a href="edta(CONTACT).html" class="link2 link" target="_blank">CONTACT</a>
-            <a href="" class="link3 link">TIME TABLE</a>
-            <a href="" class="link4 link">COMMUNITY</a>
-            <a href="login.html" class="link5"><img src="/Screenshot 2025-11-14 011229.png" alt="pixel boy" id="lo"></a>
-        </nav>
+<nav>
+    <span class="more-btn">More ▾</span>
+
+    <div class="mobile-menu">
+        <a href="#ABOUT">About</a>
+        <a href="edta(CONTACT).html" target="_blank">Contact</a>
+        <a href="">Time Table</a>
+        <a href="">Community</a>
+    </div>
+
+    <a href="/login.html" target="_blank" class="link5">
+        <img src="/Screenshot 2025-11-14 011229.png" id="lo" />
+    </a>
+</nav>
+
     </header>
 
     <div style="text-align: right; padding: 15px 30px; color: white; background: rgba(0,0,0,0.3);">
