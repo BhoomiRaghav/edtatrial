@@ -243,7 +243,6 @@ ul li:hover {
 
 @media (max-width: 768px) {
 
-    /* HEADER stays horizontal + compact */
     header {
         display: flex;
         flex-direction: row;
@@ -253,7 +252,7 @@ ul li:hover {
         height: 60px;
     }
 
-    /* Remove the huge forced desktop margin */
+    /* Remove desktop margins */
     #ed {
         margin-left: 0 !important;
     }
@@ -263,34 +262,45 @@ ul li:hover {
         height: 50px;
     }
 
-    /* NAV becomes a small row */
     nav {
         display: flex;
+        flex-direction: row;
         align-items: center;
-        gap: 8px;
+        gap: 12px;
         position: relative;
+        margin-right: 10px;
     }
 
-    /* HIDE original links on phone */
-    nav .link1,
-    nav .link2,
-    nav .link3,
-    nav .link4 {
+    /* FIX LOGIN ICON GETTING STUCK IN CORNER */
+    .link5 {
+        position: static !important;
+        margin: 0 !important;
+    }
+
+    #lo {
+        width: 35px;
+        height: 35px;
+    }
+
+    /* Hide original links */
+    .link1,
+    .link2,
+    .link3,
+    .link4 {
         display: none !important;
     }
 
-    /* MORE BUTTON */
+    /* More button */
     .more-btn {
         font-size: 12px;
         color: #ffc400;
-        padding: 6px 10px;
+        padding: 6px 8px;
         border: 1px solid #ffc400;
         border-radius: 6px;
         cursor: pointer;
-        display: inline-block;
     }
 
-    /* DROPDOWN MENU */
+    /* Dropdown */
     .mobile-menu {
         display: none;
         position: absolute;
@@ -301,15 +311,15 @@ ul li:hover {
         border-radius: 8px;
         width: 160px;
         padding: 10px;
-        z-index: 1000;
+        z-index: 999;
     }
 
     .mobile-menu a {
         display: block;
         padding: 8px;
-        color: #ffc400;
         font-size: 12px;
-        border-bottom: 1px solid rgba(255, 196, 0, 0.4);
+        color: #ffc400;
+        border-bottom: 1px solid rgba(255,196,0,0.4);
     }
 
     .mobile-menu a:last-child {
@@ -317,18 +327,6 @@ ul li:hover {
     }
 
     .show-menu {
-        display: block;
-    }
-
-    /* LOGIN ICON — FIXED PROPERLY */
-    .link5 {
-        position: static !important;
-        margin: 0 !important;
-    }
-
-    #lo {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
+        display: block !important;
     }
 }
