@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset = "utf-8">
+        <meta name="viewport" content=" width=device width" initial scale="1.0">
+        <title>Login Page</title>
+        <link rel="stylesheet" href="style2.css">
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    </head>
+    <body>
+        <video autoplay muted loop class="bg-image">
+            <source src="/purple-sky.mp4" type="video/mp4">
+        </video>
+        <div class="wrapper">
+            <!-- Login Form -->
+            <form id="loginForm" style="display: block;">
+                <h1>Login</h1>
+                <div id="loginMessage" class="message"></div>
+                
+                <div class="input-box">
+                    <input type="text" id="loginUsername" placeholder="Username" required>
+                    <i class='bx bx-user'></i>
+                </div>
+
+                <div class="input-box">
+                    <input type="password" id="loginPassword" placeholder="Password" required>
+                    <i class='bx bx-lock-alt'></i>
+                </div>
+
+                <div class="remember-forgot">
+                    <label>
+                        <input type="checkbox">Remember me
+                    </label>
+                    <a href="#">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn">Login</button>   
+                
+                <div class="register-link">
+                    <p>don't have an account? <a href="javascript:toggleForm()">register</a></p>
+                </div>
+            </form>
+
+            <!-- Registration Form -->
+            <form id="registerForm" style="display: none;">
+                <h1>Register</h1>
+                <div id="registerMessage" class="message"></div>
+                
+                <div class="input-box">
+                    <input type="text" id="regUsername" placeholder="Username" required>
+                    <i class='bx bx-user'></i>
+                </div>
+
+                <div class="input-box">
+                    <input type="email" id="regEmail" placeholder="Email" required>
+                    <i class='bx bx-envelope'></i>
+                </div>
+
+                <div class="input-box">
+                    <input type="password" id="regPassword" placeholder="Password" required>
+                    <i class='bx bx-lock-alt'></i>
+                </div>
+
+                <div class="input-box">
+                    <input type="password" id="regConfirmPassword" placeholder="Confirm Password" required>
+                    <i class='bx bx-lock-alt'></i>
+                </div>
+
+                <div style="margin:8px 0; color:#fff; font-size:14px;">
+                    <label style="display:flex; align-items:center; gap:8px;"><input type="checkbox" id="toggleShowPwd"> Show passwords</label>
+                </div>
+
+                <div id="requirements" style="background:rgba(255,255,255,0.03); padding:10px; border-radius:6px; color:#ddd; font-size:13px;">
+                    <strong>Requirements</strong>
+                    <ul style="margin:6px 0 0 18px;">
+                        <li id="userReq">Username: 3–36 characters</li>
+                        <li id="pwdLenReq">Password: 8–16 characters</li>
+                        <li id="pwdCharReq">Password: at least one letter and one number</li>
+                        <li id="pwdMatchReq">Passwords must match</li>
+                    </ul>
+                </div>
+
+                <button type="submit" class="btn">Register</button>   
+                
+                <div class="register-link">
+                    <p>already have an account? <a href="javascript:toggleForm()">login</a></p>
+                </div>
+            </form>
+        </div>
+
+        <script>
+            function toggleForm() {
+                const loginForm = document.getElementById('loginForm');
+                const registerForm = document.getElementById('registerForm');
+                loginForm.style.display = loginForm.style.display === 'none' ? 'block' : 'none';
+                registerForm.style.display = registerForm.style.display === 'none' ? 'block' : 'none';
+                document.getElementById('loginMessage').textContent = '';
+                document.getElementById('registerMessage').textContent = '';
+            }
+
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('loginUsername').value;
+                const password = document.getElementById('loginPassword').value;
+                const messageDiv = document.getElementById('loginMessage');
+
+                // Basic client-side validation for login
+                if (username.length < 3 || username.length > 36) {
+                    messageDiv.style.color = 'red';
+                    messageDiv.textContent = 'Username must be between 3 and 36 characters';
+                    return;
+                }
+                if (password.length < 8 || password.length > 16) {
+                    messageDiv.style.color = 'red';
+                    messageDiv.textContent = 'Password must be between 8 and 16 characters';
+                    return;
+                }
+
+                // Get registered users from localStorage
+                const registeredUsers = JSON.parse(localStorage.getItem('edta_users') || '{}');
+                
+                // Check if user exists and password matches
+                if (registeredUsers[username] && registeredUsers[username].password === password) {
+                    // Store current session
+                    localStorage.setItem('edta_currentUser', JSON.stringify({
+                        username: username,
+                        email: registeredUsers[username].email,
+                        loginTime: new Date().toISOString()
+                    }));
+                    
+                    messageDiv.style.color = 'green';
+                    messageDiv.textContent = 'Login successful! Redirecting...';
+                    setTimeout(() => {
+                        window.location.href = 'edta2.html';
+                    }, 1500);
+                } else {
+                    messageDiv.style.color = 'red';
+                    messageDiv.textContent = 'Invalid username or password';
+                }
+            });
+
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('regUsername').value;
+                const email = document.getElementById('regEmail').value;
+                const password = document.getElementById('regPassword').value;
+                const confirmPassword = document.getElementById('regConfirmPassword').value;
+                const messageDiv = document.getElementById('registerMessage');
+                // Client-side validation for registration (also reflected live in requirements box)
+                const passHasLetter = /[A-Za-z]/.test(password);
+                const passHasNumber = /[0-9]/.test(password);
+                if (username.length < 3 || username.length > 36) {
+                    messageDiv.style.color = 'red';
+                    messageDiv.textContent = 'Username must be between 3 and 36 characters';
+                    return;
+                }
+                if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+                    messageDiv.style.color = 'red';
+                    messageDiv.textContent = 'Please enter a valid email address';
+                    return;
+                }
+                if (password.length < 8 || password.length > 16) {
+                    messageDiv.style.color = 'red';
+                    messageDiv.textContent = 'Password must be between 8 and 16 characters';
+                    return;
+                }
+                if (!passHasLetter || !passHasNumber) {
+                    messageDiv.style.color = 'red';
+                    messageDiv.textContent = 'Password must include at least one letter and one number';
+                    return;
+                }
+                if (password !== confirmPassword) {
+                    messageDiv.style.color = 'red';
+                    messageDiv.textContent = 'Passwords do not match';
+                    return;
+                }
+
+                // Get existing users from localStorage
+                const registeredUsers = JSON.parse(localStorage.getItem('edta_users') || '{}');
+                
+                // Check if username already exists
+                if (registeredUsers[username]) {
+                    messageDiv.style.color = 'red';
+                    messageDiv.textContent = 'Username already exists';
+                    return;
+                }
+
+                // Store new user
+                registeredUsers[username] = {
+                    email: email,
+                    password: password,
+                    registeredAt: new Date().toISOString()
+                };
+                localStorage.setItem('edta_users', JSON.stringify(registeredUsers));
+
+                messageDiv.style.color = 'green';
+                messageDiv.textContent = 'Registration successful! You can now login.';
+                setTimeout(() => {
+                    toggleForm();
+                    document.getElementById('regUsername').value = '';
+                    document.getElementById('regEmail').value = '';
+                    document.getElementById('regPassword').value = '';
+                    document.getElementById('regConfirmPassword').value = '';
+                }, 1500);
+            });
+
+            // Live requirement checks and show-password toggle
+            const regUser = document.getElementById('regUsername');
+            const regPwd = document.getElementById('regPassword');
+            const regPwdConf = document.getElementById('regConfirmPassword');
+            const userReq = document.getElementById('userReq');
+            const pwdLenReq = document.getElementById('pwdLenReq');
+            const pwdCharReq = document.getElementById('pwdCharReq');
+            const pwdMatchReq = document.getElementById('pwdMatchReq');
+            const toggleShow = document.getElementById('toggleShowPwd');
+
+            function updateRequirements(){
+                const u = regUser.value || '';
+                const p = regPwd.value || '';
+                const pc = regPwdConf.value || '';
+                // username
+                if (u.length >=3 && u.length <=36) userReq.style.color = '#8df58d'; else userReq.style.color = '#ddd';
+                // pwd length
+                if (p.length >=8 && p.length <=16) pwdLenReq.style.color = '#8df58d'; else pwdLenReq.style.color = '#ddd';
+                // pwd chars
+                if (/[A-Za-z]/.test(p) && /[0-9]/.test(p)) pwdCharReq.style.color = '#8df58d'; else pwdCharReq.style.color = '#ddd';
+                // match
+                if (p && p === pc) pwdMatchReq.style.color = '#8df58d'; else pwdMatchReq.style.color = '#ddd';
+            }
+
+            [regUser, regPwd, regPwdConf].forEach(el => el.addEventListener('input', updateRequirements));
+            toggleShow.addEventListener('change', ()=>{
+                const show = toggleShow.checked;
+                regPwd.type = show ? 'text' : 'password';
+                regPwdConf.type = show ? 'text' : 'password';
+            });
+        </script>
+    </body>
+</html>

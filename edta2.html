@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDTA_2025</title>
+    <link rel="stylesheet" href="Home2.css">
+</head>
+
+<body>
+    <header>
+        <a href="" id="ed"><img src="/ezgif.com-animated-gif-maker (3).gif" alt="edu saga" width="140px"
+                height="110px"></a>
+        <nav>
+            <a href="#ABOUT" class="link1 link">ABOUT </a>
+            <a href="edta(CONTACT).html" class="link2 link" target="_blank">CONTACT</a>
+            <a href="" class="link3 link">TIME TABLE</a>
+            <a href="" class="link4 link">COMMUNITY</a>
+            <a href="javascript:logout()" class="link5"><img src="/Screenshot 2025-11-14 011229.png" alt="pixel boy" id="lo"></a>
+        </nav>
+    </header>
+
+    <div style="text-align: right; padding: 15px 30px; color: white; background: rgba(0,0,0,0.3);">
+        Welcome, <strong id="profileName">Guest</strong>!
+        <span id="profileXp" style="margin-left:12px; font-weight:600;">XP: 0</span>
+        <a href="login.html" id="loginBtn" style="margin-left: 20px; color: #fff; text-decoration: none; display: none;">Login</a>
+        <a href="javascript:logout()" id="logoutBtn" style="margin-left: 20px; color: #fff; text-decoration: none; display: none;">Logout</a>
+    </div>
+
+    <hr>
+
+    <div class="content">
+        <h2>Welcome to EDTA_2025</h2>
+        <p>Your gateway to educational resources and tools.</p>
+    </div>
+
+    <hr>
+
+
+    <div class="tool-section" id="focus-timer">
+        <h2>🎯 Focus Timer (with DND Mode)</h2>
+        <p>Set a timer to focus without distractions.</p>
+        <input type="number" id="timeInput" placeholder="Enter minutes">
+        <button onclick="startTimer()">Start Focus</button>
+        <div class="timer-display" id="timerDisplay">00:00</div>
+    </div>
+
+    <div class="tool-section" id="goal-tracker">
+        <h2>🏆 Set Your Study Goals</h2>
+        <p>Write down your goal and keep track of it.</p>
+        <input type="text" id="goalInput" placeholder="Enter your study goal...">
+        <input type="number" id="goalPoints" placeholder="Points" style="width:90px; margin-left:8px;" value="10">
+        <button onclick="addGoal()">Add Goal</button>
+        <ul id="goalList"></ul>
+    </div>
+
+
+    <div class="tool-section" id="fun-activities">
+        <h2>🎲 Fun Study Breaks</h2>
+        <p>Take a playful 2-minute break to refresh your mind!</p>
+        <div class="activities">
+            <button onclick="showActivity()">Get a Fun Challenge</button>
+            <p id="activityText"></p>
+        </div>
+    </div>
+
+    <hr>
+
+    <div id="ABOUT" class="about-section">
+        <h2>About EDTA_2025</h2>
+        <p>EDTA_2025 is dedicated to providing high-quality educational materials and fostering a community of learners
+            and educators. Our mission is to enhance learning experiences through innovative tools and resources.</p>
+    </div>
+
+    <footer>
+        <p>© 2024 EDTA. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Check if user is logged in - but allow page to load
+        let currentUser = null;
+
+        function checkLoggedIn() {
+            const user = localStorage.getItem('edta_currentUser');
+            if (user) {
+                currentUser = JSON.parse(user);
+                document.getElementById('profileName').textContent = currentUser.username;
+                document.getElementById('logoutBtn').style.display = 'inline';
+                document.getElementById('loginBtn').style.display = 'none';
+                loadUserData();
+            } else {
+                // Show login button if not logged in
+                document.getElementById('profileName').textContent = 'Guest';
+                document.getElementById('loginBtn').style.display = 'inline';
+                document.getElementById('logoutBtn').style.display = 'none';
+            }
+        }
+
+        // Check authentication before using any feature
+        function requireLogin() {
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return false;
+            }
+            return true;
+        }
+
+        // Load user data from localStorage
+        function loadUserData() {
+            if (!currentUser) return;
+            const userXp = parseInt(localStorage.getItem('edta_xp_' + currentUser.username) || '0');
+            document.getElementById('profileXp').textContent = 'XP: ' + userXp;
+            loadGoals();
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('edta_currentUser');
+            window.location.href = 'welcomepage.html';
+        }
+
+        let timer;
+        function startTimer() {
+            if (!requireLogin()) return;
+            
+            const minutes = parseInt(document.getElementById("timeInput").value);
+            if (isNaN(minutes) || minutes <= 0) {
+                alert("Please enter a valid time in minutes.");
+                return;
+            }
+
+            let time = minutes * 60;
+            document.body.requestFullscreen?.();
+
+            timer = setInterval(() => {
+                const mins = Math.floor(time / 60);
+                const secs = time % 60;
+                document.getElementById("timerDisplay").innerText =
+                    `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                time--;
+
+                if (time < 0) {
+                    clearInterval(timer);
+                    document.exitFullscreen?.();
+                    alert("⏰ Time's up! Great job focusing!");
+                }
+            }, 1000);
+        }
+
+        function loadGoals() {
+            if (!currentUser) return;
+            const userGoals = JSON.parse(localStorage.getItem('edta_goals_' + currentUser.username) || '[]');
+            
+            const list = document.getElementById('goalList');
+            list.innerHTML = '';
+            userGoals.forEach((g, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `${g.title} <small style="margin-left:8px;color:#ddd">(${g.points} pts)</small>`;
+                if (g.completed) {
+                    li.style.textDecoration = 'line-through'; 
+                    li.style.color = 'green';
+                } else {
+                    const btn = document.createElement('button'); 
+                    btn.textContent = 'Complete'; 
+                    btn.style.marginLeft = '8px';
+                    btn.onclick = () => completeGoal(index);
+                    li.appendChild(btn);
+                }
+                const delBtn = document.createElement('button');
+                delBtn.textContent = 'Delete';
+                delBtn.style.marginLeft = '8px';
+                delBtn.style.color = '#ff6b6b';
+                delBtn.onclick = () => deleteGoal(index);
+                li.appendChild(delBtn);
+                list.appendChild(li);
+            });
+        }
+
+        function addGoal() {
+            if (!requireLogin()) return;
+            
+            const goalInput = document.getElementById('goalInput');
+            const goalPoints = document.getElementById('goalPoints');
+            const title = goalInput.value.trim();
+            const points = parseInt(goalPoints.value) || 0;
+            if (!title) {
+                alert('Please enter a goal first!');
+                return;
+            }
+            
+            const userGoals = JSON.parse(localStorage.getItem('edta_goals_' + currentUser.username) || '[]');
+            
+            userGoals.push({
+                title: title,
+                points: points,
+                completed: false,
+                createdAt: new Date().toISOString()
+            });
+            
+            localStorage.setItem('edta_goals_' + currentUser.username, JSON.stringify(userGoals));
+            goalInput.value = '';
+            goalPoints.value = '10';
+            loadGoals();
+        }
+
+        function completeGoal(index) {
+            if (!requireLogin()) return;
+            
+            const userGoals = JSON.parse(localStorage.getItem('edta_goals_' + currentUser.username) || '[]');
+            
+            if (userGoals[index]) {
+                userGoals[index].completed = true;
+                const points = userGoals[index].points || 0;
+                const currentXp = parseInt(localStorage.getItem('edta_xp_' + currentUser.username) || '0');
+                localStorage.setItem('edta_xp_' + currentUser.username, currentXp + points);
+                localStorage.setItem('edta_goals_' + currentUser.username, JSON.stringify(userGoals));
+                loadGoals();
+                loadUserData();
+            }
+        }
+
+        function deleteGoal(index) {
+            if (!requireLogin()) return;
+            
+            const userGoals = JSON.parse(localStorage.getItem('edta_goals_' + currentUser.username) || '[]');
+            
+            userGoals.splice(index, 1);
+            localStorage.setItem('edta_goals_' + currentUser.username, JSON.stringify(userGoals));
+            loadGoals();
+        }
+
+        // Check login on page load (but don't redirect)
+        window.addEventListener('load', checkLoggedIn);
+
+        const activities = [
+            "Do 10 jumping jacks!",
+            "Stretch your arms and neck.",
+            "Take 5 deep breaths.",
+            "Drink a glass of water.",
+            "Write one positive thing about your day.",
+            "Do a quick doodle on paper.",
+            "Close your eyes and relax for 30 seconds.",
+            "Stand up and shake out your legs.",
+            "Take a long break of 30 mins and listen to your favorite song.",
+            "Look out the window and name 5 things you see."
+        ];
+        
+        function showActivity() {
+            if (!requireLogin()) return;
+            const random = Math.floor(Math.random() * activities.length);
+            document.getElementById("activityText").innerText = activities[random];
+        }
+    </script>
+</body>
+
+</html>
