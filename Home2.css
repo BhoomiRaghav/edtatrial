@@ -221,58 +221,94 @@ ul li:hover {
     background: #ffc400;
     color: black;
 }
-
+/* --- Mobile Layout Fixes (Max Width 768px) --- */
 @media (max-width: 768px) {
-
+    /* Adjust header for better stacking/layout on small screens */
     header {
-        flex-direction: column;
-        padding: 10px;
-        height: auto;
+        flex-direction: column; /* Stack logo and nav vertically */
+        height: auto; /* Allow height to adjust */
+        padding: 10px 20px; /* Adjust padding */
+    }
+
+    /* Adjust the main content div below the header */
+    .content {
+        flex-direction: column; /* Stack image and welcome text vertically */
         text-align: center;
     }
 
+    /* Adjust the logo/edu saga link's container */
+    #ed {
+        margin: 0 auto 10px auto; /* Center it and add space below */
+    }
+
+    /* Adjust the spaceship image/logo */
+    #ss {
+        width: 80px; /* Make it smaller for mobile */
+        height: 80px;
+        margin: 20px auto; /* Center it */
+    }
+
+    /* Fix the welcome text styling */
+    #welcome {
+        font-size: 20px; /* Smaller font size */
+        text-align: center;
+        /* Remove or drastically reduce large horizontal padding */
+        padding: 10px 10px; 
+        margin: 10px 0; /* Adjust margin for spacing */
+    }
+
+    /* Adjust the navigation links container */
     nav {
         display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
-    }
-
-    #ed img {
-        width: 100px;
-        height: 70px;
-        margin: 0;
-    }
-
-    .content {
-        flex-direction: column;
+        flex-direction: column; /* Stack links vertically */
+        width: 100%;
         text-align: center;
-        padding: 10px;
+        margin-top: 10px;
     }
 
-    #ss {
-        margin: 10px 0;
-        width: 80px;
-        height: 80px;
+    /* Ensure navigation links take full width for better tapping */
+    nav a {
+        display: block;
+        margin: 5px 0;
+        padding: 8px;
     }
-
-    #welcome {
-        font-size: 16px;
-        padding: 10px 20px;
-        margin: 0 auto;
+    
+    /* Reposition the 'login' icon (pixel boy) */
+    .link5 {
+        position: static; /* Remove absolute positioning */
+        margin: 10px auto; /* Center it */
+        right: auto;
+        left: auto;
+        top: auto;
+        order: -1; /* Place it at the top of the nav list if needed, but 'static' is better here */
     }
-
-    .tool-section {
-        width: 90%;
-        margin: 20px auto;
-        padding: 15px;
-    }
-
+    
+    /* Adjust the icon itself */
     #lo {
-        position: absolute;
-        right: 20px;
-        top: 20px;
+        position: static; /* Important: Remove 'fixed' positioning */
+        margin: 10px auto; /* Center the icon within its wrapper */
+        display: block;
+    }
+    
+    /* Ensure the h2 and p under the welcome section also stack correctly */
+    .content h2, .content p {
+        width: 90%; /* Give it a set width */
+        margin: 10px auto; /* Center the text */
+        text-align: center;
+    }
+    
+    /* Style the second 'Welcome to EDTA_2025' section text */
+    .content:nth-of-type(2) h2 {
+        font-size: 16px; 
+    }
+    .content:nth-of-type(2) p {
+        font-size: 12px;
+    }
+    
+    /* Make the tool sections slightly narrower and centered */
+    .tool-section {
+        max-width: 90%;
+        padding: 15px;
+        margin: 20px auto;
     }
 }
-
-
