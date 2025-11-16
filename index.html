@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Press Start 2P", monospace;
+      color: #ffe9a8;
+      text-align: center;
+
+      /* Calm GIF background */
+      background: url("13363.gif")
+                  no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    .overlay {
+      background: rgba(0,0,0,0.55);
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .welcome-box {
+      background: rgba(0, 0, 0, 0.65);
+      padding: 40px;
+      border: 3px solid #ffcc4d;
+      border-radius: 16px;
+      box-shadow: 4px 4px #6b4a00;
+      text-align: center;
+      width: 75%;
+      max-width: 600px;
+      animation: fadeIn 1.3s ease;
+    }
+
+    h1 {
+      color: #ffcc4d;
+      text-shadow: 3px 3px #6b4a00;
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 12px;
+      color: #ffe9a8;
+      margin-top: 10px;
+      line-height: 1.8;
+    }
+
+    .btn {
+      margin-top: 25px;
+      display: inline-block;
+      padding: 12px 26px;
+      background: #ffcc4d;
+      color: black;
+      text-decoration: none;
+      border-radius: 10px;
+      border: 2px solid #6b4a00;
+      font-size: 12px;
+      transition: 0.3s;
+      box-shadow: 3px 3px #6b4a00;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      background: #ffeaa0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="overlay">
+    <div class="welcome-box">
+      <h1>Welcome to EDUSAGA</h1>
+      <p>
+        A calm, peaceful space for learning, productivity, focus  
+        and growth — created just for you.
+      </p>
+
+      <a href="edta2.html" class="btn">ENTER WEBSITE</a>
+    </div>
+  </div>
+
+  <script>
+    // Show logged in username if available
+    window.addEventListener('load', function() {
+      const currentUser = localStorage.getItem('edta_currentUser');
+      if (currentUser) {
+        const user = JSON.parse(currentUser);
+        document.querySelector('.welcome-box h1').textContent = `Welcome back, ${user.username}!`;
+      }
+    });
+  </script>
+
+</body>
+</html>
